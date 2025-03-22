@@ -36,7 +36,7 @@ export default function SettingsPage() {
   
   // Safely get onboarding context with fallbacks
   let completedTours = {};
-  let resetTour = () => {};
+  let resetTour = (tourId: string) => {};
   let resetAllTours = () => {};
   
   try {
