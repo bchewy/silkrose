@@ -3,59 +3,49 @@
 @tailwind utilities;
 
 :root {
-  --background: #faf7f5;
-  --foreground: #1a1a2e;
-  
-  --primary: #b76e79; /* silk rose */
-  --primary-foreground: #ffffff;
-  
-  --secondary: #d4af37; /* gold */
-  --secondary-foreground: #ffffff;
-  
-  --accent: #4a0d67; /* deep purple */
-  --accent-foreground: #ffffff;
-  
-  --muted: #f2e9e4;
-  --muted-foreground: #64748b;
-  
-  --card: #ffffff;
-  --card-foreground: #1a1a2e;
+  --background: #ffffff;
+  --foreground: #171717;
+  --silk-primary: #9612d9;
+  --rose-primary: #ff3a5c;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1a1a2e;
-    --foreground: #f5f5f7;
-    
-    --primary: #d1909b; /* lighter silk rose */
-    --primary-foreground: #1a1a2e;
-    
-    --secondary: #e9c767; /* lighter gold */
-    --secondary-foreground: #1a1a2e;
-    
-    --accent: #7b2cbf; /* lighter purple */
-    --accent-foreground: #ffffff;
-    
-    --muted: #2d2d3f;
-    --muted-foreground: #94a3b8;
-    
-    --card: #242438;
-    --card-foreground: #f5f5f7;
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --silk-primary: #c23eff;
+    --rose-primary: #ff6a83;
   }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-inter);
+  font-family: 'Inter', sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-playfair);
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer components {
+  .silk-gradient {
+    @apply bg-gradient-to-r from-silk-600 to-rose-500;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-md p-6;
+  }
+  
+  .btn-primary {
+    @apply px-4 py-2 bg-silk-600 hover:bg-silk-700 text-white rounded-lg transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-lg transition-colors;
+  }
+  
+  .btn-outline {
+    @apply px-4 py-2 border border-silk-600 text-silk-600 hover:bg-silk-50 rounded-lg transition-colors;
+  }
+  
+  .input {
+    @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-silk-500;
   }
 }
