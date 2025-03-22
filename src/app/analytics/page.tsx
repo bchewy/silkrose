@@ -66,7 +66,7 @@ const analyticsTourSteps: Step[] = [
     placement: 'top',
   },
   {
-    target: '.chart-container:first-child',
+    target: '.liquidity-chart',
     content: 'Interactive charts help you visualize trends and patterns in your financial data.',
     placement: 'bottom',
   },
@@ -76,12 +76,12 @@ const analyticsTourSteps: Step[] = [
     placement: 'top',
   },
   {
-    target: '.btn-outline:first-child',
+    target: '.filter-btn',
     content: 'Filter your analytics data using various parameters to focus on specific aspects of your business.',
     placement: 'bottom',
   },
   {
-    target: '.btn-outline:nth-child(2)',
+    target: '.export-btn',
     content: 'Export your analytics data for further analysis or reporting.',
     placement: 'bottom',
   }
@@ -203,7 +203,7 @@ export default function FinancialAnalyticsPage() {
             <p className="text-gray-500 dark:text-gray-400 mt-1">Comprehensive insights into trade finance performance</p>
           </div>
           <div className="flex space-x-3">
-            <div className="relative">
+            <div className="relative time-filter">
               <select 
                 className="input pr-10 appearance-none"
                 value={selectedPeriod}
@@ -215,11 +215,11 @@ export default function FinancialAnalyticsPage() {
               </select>
               <FiCalendar className="absolute right-3 top-3 text-gray-400 pointer-events-none" />
             </div>
-            <button className="btn-outline flex items-center">
+            <button className="btn-outline filter-btn flex items-center">
               <FiFilter className="mr-2 h-4 w-4" />
               Filters
             </button>
-            <button className="btn-outline flex items-center">
+            <button className="btn-outline export-btn flex items-center">
               <FiDownload className="mr-2 h-4 w-4" />
               Export
             </button>
@@ -227,7 +227,7 @@ export default function FinancialAnalyticsPage() {
         </div>
         
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 key-metrics">
           <div className="card p-4">
             <div className="flex justify-between items-start">
               <div>
@@ -295,7 +295,7 @@ export default function FinancialAnalyticsPage() {
         
         {/* Charts - First Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="card p-4">
+          <div className="card p-4 chart-container liquidity-chart">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-medium">Liquidity Trend</h3>
               <button className="text-sm text-silk-600 hover:text-silk-700 flex items-center">
@@ -535,7 +535,7 @@ export default function FinancialAnalyticsPage() {
         </div>
         
         {/* Performance Metrics */}
-        <div className="card p-4">
+        <div className="card p-4 performance-breakdown">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-medium">Performance Against Targets</h3>
             <div className="flex items-center text-sm text-gray-500">

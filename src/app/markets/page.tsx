@@ -34,27 +34,27 @@ const marketsTourSteps: Step[] = [
     disableBeacon: true,
   },
   {
-    target: '.card:first-child',
+    target: '.market-filters',
     content: 'Filter markets by geographic region, industry, and timeframe to focus on areas relevant to your business.',
     placement: 'bottom',
   },
   {
-    target: '.market-cards',
+    target: '.market-trends',
     content: 'Each card represents a market with key indicators. Click to expand and see more details about market conditions and opportunities.',
     placement: 'top',
   },
   {
-    target: '.market-trend',
+    target: '.market-trend-indicator',
     content: 'These indicators show the current trend in each market, helping you identify growing or declining opportunities.',
     placement: 'right',
   },
   {
-    target: '.btn-outline:first-child',
+    target: '.filter-advanced-btn',
     content: 'Access additional filtering options to find specific markets that match your criteria.',
     placement: 'bottom',
   },
   {
-    target: '.btn-outline:nth-child(2)',
+    target: '.export-report-btn',
     content: 'Export market data for further analysis or reporting.',
     placement: 'bottom',
   }
@@ -84,11 +84,11 @@ export default function GlobalMarketsPage() {
             <p className="text-gray-500 dark:text-gray-400 mt-1">Monitor market trends and trade opportunities worldwide</p>
           </div>
           <div className="flex space-x-3">
-            <button className="btn-outline flex items-center">
+            <button className="btn-outline flex items-center filter-advanced-btn">
               <FiFilter className="mr-2 h-4 w-4" />
               Advanced Filters
             </button>
-            <button className="btn-outline flex items-center">
+            <button className="btn-outline flex items-center export-report-btn">
               <FiDownload className="mr-2 h-4 w-4" />
               Export Report
             </button>
@@ -147,7 +147,7 @@ export default function GlobalMarketsPage() {
         </div>
 
         {/* Search and Filter Bar */}
-        <div className="card p-4">
+        <div className="card p-4 market-filters">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
               <input
@@ -199,7 +199,7 @@ export default function GlobalMarketsPage() {
         </div>
         
         {/* Market Trends */}
-        <div className="space-y-4">
+        <div className="space-y-4 market-trends">
           {[
             {
               id: 'MKT-APAC-001',
@@ -307,7 +307,7 @@ export default function GlobalMarketsPage() {
                 </div>
                 <div className="flex items-center">
                   <div className="mr-4">
-                    <span className={`px-3 py-1 rounded-full text-xs ${
+                    <span className={`px-3 py-1 rounded-full text-xs market-trend-indicator ${
                       market.trend === 'Positive' 
                         ? 'bg-green-100 text-green-800' 
                         : market.trend === 'Negative'
