@@ -35,7 +35,7 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState('general');
   
   // Safely get onboarding context with fallbacks
-  let completedTours = {};
+  let completedTours: Record<string, boolean> = {};
   let resetTour = (tourId: string) => {};
   let resetAllTours = () => {};
   
