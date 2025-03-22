@@ -236,7 +236,7 @@ const OnboardingTour = ({
   return (
     <>
       {/* Tour overlay */}
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={skipTour} />
+      <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm z-40" onClick={skipTour} />
       
       {/* Tour tooltip */}
       <div

@@ -60,7 +60,7 @@ export default function LoginPage() {
         <header className="w-full p-6 flex items-center justify-between">
           <div className="flex items-center">
             <SilkRoseLogo size={32} className="animate-spin-slow" />
-            <h1 className="text-2xl font-bold ml-3 text-white">SilkRose</h1>
+            <h1 className="text-2xl font-bold ml-3 text-white">SilkierTrade</h1>
           </div>
           <div className="text-sm text-gray-400">{currentTime}</div>
         </header>
@@ -263,8 +263,13 @@ export default function LoginPage() {
             <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-sm text-gray-400">All systems operational</span>
           </div>
-          <div className="text-xs text-gray-500">
-            &copy; {new Date().getFullYear()} SilkRose Technologies
+          <div className="flex flex-col items-end">
+            <div className="text-xs text-gray-400 mb-1">
+              <span className="text-yellow-500">⚠️</span> Best viewed on desktop/laptop devices
+            </div>
+            <div className="text-xs text-gray-500">
+              &copy; {new Date().getFullYear()} SilkRose Technologies
+            </div>
           </div>
         </footer>
       </div>

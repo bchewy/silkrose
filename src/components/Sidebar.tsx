@@ -175,7 +175,7 @@ export default function Sidebar() {
               <SilkRoseLogo size={32} className="animate-spin-slow" />
               <div className="ml-3">
                 <h2 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-silk-600 to-rose-500">
-                  Silkier Trade
+                  SilkierTrade
                 </h2>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Backoffice</p>
               </div>
