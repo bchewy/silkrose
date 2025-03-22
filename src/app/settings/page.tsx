@@ -2,10 +2,60 @@
 
 import { useState } from 'react';
 import DashboardLayout from '../dashboard-layout';
-import { FiSave, FiLock, FiUser, FiBell, FiGlobe, FiShield } from 'react-icons/fi';
+import { FiSave, FiLock, FiUser, FiBell, FiGlobe, FiShield, FiHelpCircle, FiRefreshCw } from 'react-icons/fi';
+import OnboardingTour, { Step } from '../../components/OnboardingTour';
+import { useOnboarding } from '../../context/OnboardingContext';
+
+// Define settings tour steps
+const settingsTourSteps: Step[] = [
+  {
+    target: 'body',
+    content: 'Welcome to the Settings page! Here you can customize various aspects of your SilkRose experience.',
+    placement: 'center',
+    disableBeacon: true,
+  },
+  {
+    target: '.settings-tabs',
+    content: 'Use these tabs to navigate between different setting categories.',
+    placement: 'right',
+  },
+  {
+    target: '.settings-content',
+    content: 'This area displays the settings for your currently selected category.',
+    placement: 'left',
+  },
+  {
+    target: '.onboarding-section',
+    content: 'In this section, you can manage the onboarding guides for different pages. Reset a guide to see it again.',
+    placement: 'top',
+  }
+];
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState('general');
+  
+  // Safely get onboarding context with fallbacks
+  let completedTours = {};
+  let resetTour = () => {};
+  let resetAllTours = () => {};
+  
+  try {
+    const onboardingContext = useOnboarding();
+    completedTours = onboardingContext.completedTours;
+    resetTour = onboardingContext.resetTour;
+    resetAllTours = onboardingContext.resetAllTours;
+  } catch (e) {
+    console.error("Error accessing OnboardingContext:", e);
+  }
+
+  // Page names for the tours
+  const tourPages = [
+    { id: 'dashboard-page', name: 'Dashboard' },
+    { id: 'transactions-page', name: 'Transactions' },
+    { id: 'opportunities-page', name: 'Trade Opportunities' },
+    { id: 'investors-page', name: 'Investors' },
+    { id: 'settings-page', name: 'Settings' }
+  ];
 
   return (
     <DashboardLayout>
@@ -17,12 +67,13 @@ export default function SettingsPage() {
 
         <div className="flex flex-col md:flex-row gap-6">
           {/* Tabs */}
-          <div className="w-full md:w-64 card p-0 overflow-hidden">
+          <div className="w-full md:w-64 card p-0 overflow-hidden settings-tabs">
             <ul>
               {[
                 { id: 'general', name: 'General', icon: FiUser },
                 { id: 'security', name: 'Security', icon: FiLock },
                 { id: 'notifications', name: 'Notifications', icon: FiBell },
+                { id: 'onboarding', name: 'Onboarding', icon: FiHelpCircle },
                 { id: 'api', name: 'API Access', icon: FiGlobe },
                 { id: 'permissions', name: 'Permissions', icon: FiShield },
               ].map((tab) => (
@@ -44,7 +95,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Content */}
-          <div className="flex-1 card">
+          <div className="flex-1 card settings-content">
             {activeTab === 'general' && (
               <div>
                 <h3 className="text-lg font-medium mb-4">General Settings</h3>
@@ -157,6 +208,72 @@ export default function SettingsPage() {
               </div>
             )}
 
+            {activeTab === 'onboarding' && (
+              <div className="onboarding-section">
+                <h3 className="text-lg font-medium mb-4">Onboarding Guide Settings</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  Manage the onboarding guides for different pages. Reset a guide to see it again on your next visit.
+                </p>
+                <div className="space-y-4">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-200 dark:border-gray-800">
+                          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Page</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Status</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {tourPages.map((page) => (
+                          <tr key={page.id} className="border-b border-gray-100 dark:border-gray-800">
+                            <td className="py-3 px-4">
+                              <div className="flex items-center">
+                                <FiHelpCircle className="h-4 w-4 mr-2 text-silk-600" />
+                                <span>{page.name} Page Guide</span>
+                              </div>
+                            </td>
+                            <td className="py-3 px-4">
+                              <span className={`px-2 py-1 rounded-full text-xs ${
+                                completedTours[page.id] 
+                                  ? 'bg-green-100 text-green-800' 
+                                  : 'bg-blue-100 text-blue-800'
+                              }`}>
+                                {completedTours[page.id] ? 'Completed' : 'Available'}
+                              </span>
+                            </td>
+                            <td className="py-3 px-4">
+                              <button 
+                                onClick={() => resetTour(page.id)}
+                                className="flex items-center text-silk-600 hover:text-silk-700"
+                                disabled={!completedTours[page.id]}
+                              >
+                                <FiRefreshCw className="h-4 w-4 mr-1" />
+                                Reset Guide
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div className="pt-4">
+                    <button 
+                      onClick={() => {
+                        resetAllTours();
+                        window.location.reload();
+                      }}
+                      className="btn-secondary flex items-center"
+                    >
+                      <FiRefreshCw className="mr-2 h-4 w-4" />
+                      Reset All Guides
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {activeTab === 'notifications' && (
               <div>
                 <h3 className="text-lg font-medium mb-4">Notification Preferences</h3>
@@ -179,26 +296,6 @@ export default function SettingsPage() {
                     <div className="relative inline-block w-10 mr-2 align-middle select-none">
                       <input type="checkbox" id="liquidity-toggle" defaultChecked className="sr-only" />
                       <label htmlFor="liquidity-toggle" className="block h-6 w-10 rounded-full bg-gray-300 dark:bg-gray-700 cursor-pointer"></label>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800">
-                    <div>
-                      <p className="font-medium">Security Alerts</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Receive notifications about security events</p>
-                    </div>
-                    <div className="relative inline-block w-10 mr-2 align-middle select-none">
-                      <input type="checkbox" id="security-toggle" defaultChecked className="sr-only" />
-                      <label htmlFor="security-toggle" className="block h-6 w-10 rounded-full bg-gray-300 dark:bg-gray-700 cursor-pointer"></label>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800">
-                    <div>
-                      <p className="font-medium">Marketing Updates</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Receive news and promotional materials</p>
-                    </div>
-                    <div className="relative inline-block w-10 mr-2 align-middle select-none">
-                      <input type="checkbox" id="marketing-toggle" className="sr-only" />
-                      <label htmlFor="marketing-toggle" className="block h-6 w-10 rounded-full bg-gray-300 dark:bg-gray-700 cursor-pointer"></label>
                     </div>
                   </div>
                   <div className="pt-4">
@@ -334,6 +431,12 @@ export default function SettingsPage() {
             )}
           </div>
         </div>
+
+        {/* Onboarding Tour */}
+        <OnboardingTour 
+          tourId="settings-page"
+          steps={settingsTourSteps}
+        />
       </div>
     </DashboardLayout>
   );

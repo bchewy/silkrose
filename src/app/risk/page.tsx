@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import DashboardLayout from '../dashboard-layout';
+import OnboardingTour, { Step } from '../../components/OnboardingTour';
 import { 
   FiFilter, 
   FiDownload, 
@@ -22,6 +23,41 @@ import {
 const riskCategories = ['All Categories', 'Credit Risk', 'Market Risk', 'Operational Risk', 'Liquidity Risk', 'Country Risk'];
 const riskLevels = ['All Levels', 'Low', 'Medium', 'High', 'Critical'];
 const timeframes = ['Last 7 Days', 'Last 30 Days', 'Last 90 Days', 'Last Year', 'All Time'];
+
+// Tour steps for the risk management page
+const riskTourSteps: Step[] = [
+  {
+    target: 'body',
+    content: 'Welcome to the Risk Management page! This page helps you monitor and manage various types of risk in your trade finance operations.',
+    placement: 'center',
+    disableBeacon: true,
+  },
+  {
+    target: '.card:first-child',
+    content: 'Use these filters to focus on specific risk categories, levels, and timeframes.',
+    placement: 'bottom',
+  },
+  {
+    target: '.risk-metrics',
+    content: 'These metrics provide a high-level overview of your current risk exposure across different categories.',
+    placement: 'top',
+  },
+  {
+    target: '.risk-alerts',
+    content: 'Critical alerts that require your immediate attention will appear here.',
+    placement: 'right',
+  },
+  {
+    target: '.btn-outline:first-child',
+    content: 'Access additional filtering options to refine your risk analysis.',
+    placement: 'bottom',
+  },
+  {
+    target: '.btn-outline:nth-child(2)',
+    content: 'Export your risk data for further analysis or reporting.',
+    placement: 'bottom',
+  }
+];
 
 export default function RiskManagementPage() {
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
@@ -532,6 +568,14 @@ export default function RiskManagementPage() {
             </button>
           </div>
         </div>
+
+        {/* Additional risk management content would go here */}
+
+        {/* Onboarding Tour */}
+        <OnboardingTour 
+          tourId="risk-page"
+          steps={riskTourSteps}
+        />
       </div>
     </DashboardLayout>
   );

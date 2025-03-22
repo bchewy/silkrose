@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import DashboardLayout from '../dashboard-layout';
+import OnboardingTour, { Step } from '../../components/OnboardingTour';
 import { 
   FiFilter, 
   FiDownload, 
@@ -23,6 +24,41 @@ import {
 const regions = ['All Regions', 'Asia Pacific', 'Europe', 'North America', 'Latin America', 'Middle East', 'Africa'];
 const industries = ['All Industries', 'Electronics', 'Agriculture', 'Pharmaceuticals', 'Textiles', 'Automotive', 'Energy'];
 const timeframes = ['Last 7 Days', 'Last 30 Days', 'Last 90 Days', 'Last Year', 'All Time'];
+
+// Tour steps for the markets page
+const marketsTourSteps: Step[] = [
+  {
+    target: 'body',
+    content: 'Welcome to the Global Markets page! This page helps you monitor global markets and identify trade finance opportunities worldwide.',
+    placement: 'center',
+    disableBeacon: true,
+  },
+  {
+    target: '.card:first-child',
+    content: 'Filter markets by geographic region, industry, and timeframe to focus on areas relevant to your business.',
+    placement: 'bottom',
+  },
+  {
+    target: '.market-cards',
+    content: 'Each card represents a market with key indicators. Click to expand and see more details about market conditions and opportunities.',
+    placement: 'top',
+  },
+  {
+    target: '.market-trend',
+    content: 'These indicators show the current trend in each market, helping you identify growing or declining opportunities.',
+    placement: 'right',
+  },
+  {
+    target: '.btn-outline:first-child',
+    content: 'Access additional filtering options to find specific markets that match your criteria.',
+    placement: 'bottom',
+  },
+  {
+    target: '.btn-outline:nth-child(2)',
+    content: 'Export market data for further analysis or reporting.',
+    placement: 'bottom',
+  }
+];
 
 export default function GlobalMarketsPage() {
   const [selectedRegion, setSelectedRegion] = useState('All Regions');
@@ -423,6 +459,12 @@ export default function GlobalMarketsPage() {
             </button>
           </div>
         </div>
+
+        {/* Onboarding Tour */}
+        <OnboardingTour 
+          tourId="markets-page"
+          steps={marketsTourSteps}
+        />
       </div>
     </DashboardLayout>
   );

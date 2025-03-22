@@ -29,6 +29,7 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import OnboardingTour, { Step } from '../../components/OnboardingTour';
 
 // Register ChartJS components
 ChartJS.register(
@@ -45,6 +46,46 @@ ChartJS.register(
 
 // Time periods for filtering
 const timePeriods = ['Last 7 Days', 'Last 30 Days', 'Last Quarter', 'Year to Date', 'Custom'];
+
+// Tour steps for the analytics page
+const analyticsTourSteps: Step[] = [
+  {
+    target: 'body',
+    content: 'Welcome to the Financial Analytics page! This page provides comprehensive insights into your trade finance performance.',
+    placement: 'center',
+    disableBeacon: true,
+  },
+  {
+    target: '.time-filter',
+    content: 'Use these options to adjust the time period for all analytics on this page.',
+    placement: 'bottom',
+  },
+  {
+    target: '.key-metrics',
+    content: 'These key metrics provide a snapshot of your financial performance at a glance.',
+    placement: 'top',
+  },
+  {
+    target: '.chart-container:first-child',
+    content: 'Interactive charts help you visualize trends and patterns in your financial data.',
+    placement: 'bottom',
+  },
+  {
+    target: '.performance-breakdown',
+    content: 'This section breaks down your performance by different categories for deeper analysis.',
+    placement: 'top',
+  },
+  {
+    target: '.btn-outline:first-child',
+    content: 'Filter your analytics data using various parameters to focus on specific aspects of your business.',
+    placement: 'bottom',
+  },
+  {
+    target: '.btn-outline:nth-child(2)',
+    content: 'Export your analytics data for further analysis or reporting.',
+    placement: 'bottom',
+  }
+];
 
 export default function FinancialAnalyticsPage() {
   const [selectedPeriod, setSelectedPeriod] = useState('Last 30 Days');
@@ -609,6 +650,12 @@ export default function FinancialAnalyticsPage() {
             </div>
           </div>
         </div>
+
+        {/* Onboarding Tour */}
+        <OnboardingTour 
+          tourId="analytics-page"
+          steps={analyticsTourSteps}
+        />
       </div>
     </DashboardLayout>
   );

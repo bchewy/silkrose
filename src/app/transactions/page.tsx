@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import DashboardLayout from '../dashboard-layout';
+import OnboardingTour, { Step } from '../../components/OnboardingTour';
 import { 
   FiFilter, 
   FiDownload, 
@@ -22,6 +23,46 @@ import {
 const transactionStatuses = ['All Statuses', 'Documentation', 'Due Diligence', 'Approval', 'Funding', 'Active', 'Completed'];
 const transactionTypes = ['All Types', 'Import', 'Export', 'Domestic'];
 const transactionSizes = ['All Sizes', '<$500K', '$500K-$1M', '$1M-$5M', '$5M+'];
+
+// Tour steps for the transactions page
+const transactionTourSteps: Step[] = [
+  {
+    target: 'body',
+    content: 'Welcome to the Transaction Flow page! This tour will guide you through the main features of this page.',
+    placement: 'center',
+    disableBeacon: true,
+  },
+  {
+    target: '.search-filter-section',
+    content: 'Use these filters to quickly find the transactions you need. You can filter by status, type, and amount.',
+    placement: 'bottom',
+  },
+  {
+    target: '.transaction-card',
+    content: 'Each card represents a transaction. Click the arrow to expand and see more details about each transaction.',
+    placement: 'top',
+  },
+  {
+    target: '.progress-indicator',
+    content: 'This progress bar shows how far along the transaction is in its lifecycle.',
+    placement: 'bottom',
+  },
+  {
+    target: '.advanced-filters-btn',
+    content: 'Click here to access more advanced filtering options for your transactions.',
+    placement: 'bottom',
+  },
+  {
+    target: '.export-btn',
+    content: 'You can export transaction data to various formats using this button.',
+    placement: 'bottom',
+  },
+  {
+    target: '.timeline-btn',
+    content: 'Switch to timeline view to see all transactions on a chronological timeline.',
+    placement: 'bottom',
+  }
+];
 
 export default function TransactionsPage() {
   const [selectedStatus, setSelectedStatus] = useState('All Statuses');
@@ -47,15 +88,15 @@ export default function TransactionsPage() {
             <p className="text-gray-500 dark:text-gray-400 mt-1">Monitor and manage trade finance transactions</p>
           </div>
           <div className="flex space-x-3">
-            <button className="btn-outline flex items-center">
+            <button className="btn-outline flex items-center advanced-filters-btn">
               <FiFilter className="mr-2 h-4 w-4" />
               Advanced Filters
             </button>
-            <button className="btn-outline flex items-center">
+            <button className="btn-outline flex items-center export-btn">
               <FiDownload className="mr-2 h-4 w-4" />
               Export
             </button>
-            <button className="btn-outline flex items-center">
+            <button className="btn-outline flex items-center timeline-btn">
               <FiCalendar className="mr-2 h-4 w-4" />
               Timeline View
             </button>
@@ -63,7 +104,7 @@ export default function TransactionsPage() {
         </div>
 
         {/* Search and Filter Bar */}
-        <div className="card p-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700">
+        <div className="card p-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 search-filter-section">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
               <label className="block mb-1 text-sm font-medium text-gray-600 dark:text-gray-400">Search</label>
@@ -182,7 +223,7 @@ export default function TransactionsPage() {
               documents: ['Sales Contract', 'Invoice', 'Phytosanitary Certificate', 'Bill of Lading']
             },
           ].map((transaction, index) => (
-            <div key={index} className="card">
+            <div key={index} className={`card transaction-card ${index === 0 ? 'first-transaction' : ''}`}>
               <div className="flex justify-between items-start">
                 <div>
                   <div className="flex items-center">
@@ -223,7 +264,7 @@ export default function TransactionsPage() {
               </div>
               
               {/* Progress Bar */}
-              <div className="mt-4">
+              <div className="mt-4 progress-indicator">
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
                   <div 
                     className="bg-gradient-to-r from-silk-600 to-rose-500 h-2.5 rounded-full" 
@@ -363,6 +404,12 @@ export default function TransactionsPage() {
             </button>
           </div>
         </div>
+        
+        {/* Onboarding Tour */}
+        <OnboardingTour 
+          tourId="transactions-page"
+          steps={transactionTourSteps}
+        />
       </div>
     </DashboardLayout>
   );

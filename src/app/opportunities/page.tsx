@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import DashboardLayout from '../dashboard-layout';
+import OnboardingTour, { Step } from '../../components/OnboardingTour';
 import { 
   FiFilter, 
   FiDownload, 
@@ -27,6 +28,41 @@ const industryOptions = ['All Industries', 'Electronics', 'Agriculture', 'Pharma
 const amountOptions = ['All Amounts', '<$500K', '$500K-$1M', '$1M-$5M', '$5M+'];
 const termOptions = ['All Terms', '30-60 days', '60-90 days', '90-180 days', '180+ days'];
 const riskOptions = ['All Risk Levels', 'Low', 'Medium', 'High'];
+
+// Tour steps for the opportunities page
+const opportunitiesTourSteps: Step[] = [
+  {
+    target: 'body',
+    content: 'Welcome to the Trade Opportunities page! This page helps you discover and manage financing opportunities.',
+    placement: 'center',
+    disableBeacon: true,
+  },
+  {
+    target: '.card:first-child',
+    content: 'Use these filters to find opportunities that match specific criteria like industry, amount, term, and risk level.',
+    placement: 'bottom',
+  },
+  {
+    target: '.card:last-child',
+    content: 'Each card represents a trade financing opportunity. Click the arrow to see more details about each opportunity.',
+    placement: 'top',
+  },
+  {
+    target: '.btn-primary',
+    content: 'Click here to add a new opportunity to the platform.',
+    placement: 'left',
+  },
+  {
+    target: '.btn-outline:first-child',
+    content: 'Access advanced filters for more specific search parameters.',
+    placement: 'bottom',
+  },
+  {
+    target: '.btn-outline:nth-child(2)',
+    content: 'Export your current view of opportunities to various formats.',
+    placement: 'bottom',
+  }
+];
 
 export default function OpportunitiesPage() {
   const [selectedIndustry, setSelectedIndustry] = useState('All Industries');
@@ -440,6 +476,12 @@ export default function OpportunitiesPage() {
           </div>
         </div>
       </div>
+
+      {/* Onboarding Tour */}
+      <OnboardingTour 
+        tourId="opportunities-page"
+        steps={opportunitiesTourSteps}
+      />
     </DashboardLayout>
   );
 } 

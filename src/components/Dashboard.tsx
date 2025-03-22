@@ -28,6 +28,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line, Doughnut, Bar } from 'react-chartjs-2';
+import OnboardingTour, { Step } from './OnboardingTour';
 
 // Register ChartJS components
 ChartJS.register(
@@ -41,6 +42,41 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+// Define dashboard tour steps
+const dashboardTourSteps: Step[] = [
+  {
+    target: 'body',
+    content: 'Welcome to the SilkRose dashboard! This tour will help you understand the key features.',
+    placement: 'center',
+    disableBeacon: true,
+  },
+  {
+    target: '.stats-grid',
+    content: 'This section shows key metrics at a glance, including available liquidity, active investors, and pending transactions.',
+    placement: 'bottom',
+  },
+  {
+    target: '.liquidity-trend',
+    content: 'The liquidity trend chart shows how available and deployed capital has changed over time.',
+    placement: 'bottom',
+  },
+  {
+    target: '.investor-allocation',
+    content: 'This chart breaks down your investors by type, showing the distribution across different categories.',
+    placement: 'left',
+  },
+  {
+    target: '.urgent-attention',
+    content: 'Items requiring your immediate attention appear here. Click on any item to view more details.',
+    placement: 'right',
+  },
+  {
+    target: '.trade-opportunities',
+    content: 'Browse recent trade finance opportunities here. You can see key details like amount, term, and APR at a glance.',
+    placement: 'top',
+  }
+];
 
 export default function Dashboard() {
   // Key stats for the dashboard
@@ -124,7 +160,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 stats-grid">
         {stats.map((stat, index) => (
           <div key={index} className="card p-4">
             <div className="flex justify-between items-start">
@@ -152,7 +188,7 @@ export default function Dashboard() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
         {/* Liquidity Trend Chart */}
-        <div className="card p-4">
+        <div className="card p-4 liquidity-trend">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-medium">Liquidity Trend</h3>
             <Link href="/analytics" className="text-sm text-silk-600 hover:text-silk-700 flex items-center">
@@ -206,7 +242,7 @@ export default function Dashboard() {
       {/* Investor Allocation and Urgent Attention */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Investor Allocation */}
-        <div className="card p-4">
+        <div className="card p-4 investor-allocation">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-medium">Investor Allocation</h3>
             <Link href="/investors" className="text-sm text-silk-600 hover:text-silk-700 flex items-center">
@@ -238,7 +274,7 @@ export default function Dashboard() {
         </div>
 
         {/* Urgent Attention Items */}
-        <div className="card p-4 col-span-1 lg:col-span-2">
+        <div className="card p-4 col-span-1 lg:col-span-2 urgent-attention">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-medium">Urgent Attention Required</h3>
             <Link href="/transactions" className="text-sm text-silk-600 hover:text-silk-700 flex items-center">
@@ -307,7 +343,7 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Trade Opportunities */}
-      <div className="card p-4">
+      <div className="card p-4 trade-opportunities">
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-medium">Recent Trade Opportunities</h3>
           <Link href="/opportunities" className="text-sm text-silk-600 hover:text-silk-700 flex items-center">
@@ -424,6 +460,12 @@ export default function Dashboard() {
           </table>
         </div>
       </div>
+
+      {/* Onboarding Tour */}
+      <OnboardingTour 
+        tourId="dashboard-page"
+        steps={dashboardTourSteps}
+      />
     </div>
   );
 } 

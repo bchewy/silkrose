@@ -2,11 +2,47 @@
 
 import { useState } from 'react';
 import DashboardLayout from '../dashboard-layout';
+import OnboardingTour, { Step } from '../../components/OnboardingTour';
 import { FiPlus, FiFilter, FiDownload, FiSearch, FiCheck, FiX, FiEye, FiMessageSquare } from 'react-icons/fi';
 
 const investorTypes = ['All Types', 'Private Equity', 'Family Office', 'Institutional', 'Corporate', 'Individual'];
 const investmentSizes = ['All Sizes', '$100K-$500K', '$500K-$1M', '$1M-$5M', '$5M-$10M', '$10M+'];
 const focusAreas = ['All Areas', 'Import/Export', 'Manufacturing', 'Healthcare', 'Agriculture', 'Technology', 'Consumer Goods'];
+
+// Tour steps for the investors page
+const investorsTourSteps: Step[] = [
+  {
+    target: 'body',
+    content: 'Welcome to the Investor Matching page! This page helps you manage investors and match them with suitable opportunities.',
+    placement: 'center',
+    disableBeacon: true,
+  },
+  {
+    target: '.card:first-child',
+    content: 'Use these filters to narrow down investors by type, investment size, and focus areas.',
+    placement: 'bottom',
+  },
+  {
+    target: 'table',
+    content: 'This table shows all your investors with key information about each one.',
+    placement: 'top',
+  },
+  {
+    target: '.btn-primary',
+    content: 'Click here to add a new investor to the platform.',
+    placement: 'left',
+  },
+  {
+    target: '.btn-outline:first-child',
+    content: 'Access advanced filters for more specific search parameters.',
+    placement: 'bottom',
+  },
+  {
+    target: '.btn-outline:nth-child(2)',
+    content: 'Export your current view of investors to various formats.',
+    placement: 'bottom',
+  }
+];
 
 export default function InvestorsPage() {
   const [selectedType, setSelectedType] = useState('All Types');
@@ -327,6 +363,12 @@ export default function InvestorsPage() {
           </div>
         </div>
       </div>
+
+      {/* Onboarding Tour */}
+      <OnboardingTour 
+        tourId="investors-page"
+        steps={investorsTourSteps}
+      />
     </DashboardLayout>
   );
 } 
