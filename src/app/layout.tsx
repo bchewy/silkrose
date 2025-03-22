@@ -9,7 +9,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "SilkRose Admin Panel",
-  description: "Admin dashboard for SilkRose liquidity management",
+  description: "Admin dashboard for SilkRose's liquidity management",
 };
 
 export default function RootLayout({

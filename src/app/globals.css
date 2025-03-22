@@ -46,6 +46,11 @@ body {
   }
   
   .input {
-    @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-silk-500;
+    @apply w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-silk-500 text-gray-800 dark:text-gray-100;
+  }
+  
+  /* Input placeholder styles */
+  .input::placeholder {
+    @apply text-gray-500 dark:text-gray-400;
   }
 }

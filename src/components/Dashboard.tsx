@@ -121,23 +121,6 @@ export default function Dashboard() {
     ],
   };
 
-  // Transaction timeline comparison chart data
-  const timelineComparisonData = {
-    labels: ['Documentation', 'Due Diligence', 'Approval', 'Funding', 'Settlement'],
-    datasets: [
-      {
-        label: 'Traditional Banking',
-        data: [10, 15, 12, 8, 5],
-        backgroundColor: 'rgba(209, 213, 219, 0.7)',
-      },
-      {
-        label: 'SilkRose Platform',
-        data: [3, 4, 2, 1, 1],
-        backgroundColor: 'rgba(236, 72, 153, 0.7)',
-      },
-    ],
-  };
-
   return (
     <div className="space-y-6">
       {/* Stats Grid */}
@@ -167,7 +150,7 @@ export default function Dashboard() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
         {/* Liquidity Trend Chart */}
         <div className="card p-4">
           <div className="flex justify-between items-center mb-4">
@@ -210,57 +193,6 @@ export default function Dashboard() {
                     callbacks: {
                       label: function(context) {
                         return context.dataset.label + ': $' + context.parsed.y + 'M';
-                      }
-                    }
-                  }
-                },
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Transaction Timeline Comparison */}
-        <div className="card p-4">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="font-medium">Transaction Timeline Comparison (Days)</h3>
-            <Link href="/transactions" className="text-sm text-silk-600 hover:text-silk-700 flex items-center">
-              <span>View Transactions</span>
-              <FiArrowRight className="ml-1 h-4 w-4" />
-            </Link>
-          </div>
-          <div className="h-64">
-            <Bar 
-              data={timelineComparisonData} 
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    grid: {
-                      display: true,
-                      color: 'rgba(0, 0, 0, 0.05)',
-                    },
-                    ticks: {
-                      callback: function(value) {
-                        return value + ' days';
-                      }
-                    }
-                  },
-                  x: {
-                    grid: {
-                      display: false,
-                    }
-                  }
-                },
-                plugins: {
-                  legend: {
-                    position: 'top',
-                  },
-                  tooltip: {
-                    callbacks: {
-                      label: function(context) {
-                        return context.dataset.label + ': ' + context.parsed.y + ' days';
                       }
                     }
                   }

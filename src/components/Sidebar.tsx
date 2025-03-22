@@ -60,13 +60,13 @@ export default function Sidebar() {
           <div className="px-4 py-6 border-b border-gray-200 dark:border-gray-800">
             <div className="flex items-center">
               <div className="h-10 w-10 rounded-full bg-gradient-to-r from-silk-600 to-rose-500 flex items-center justify-center text-white font-bold text-xl">
-                SR
+                ST
               </div>
               <div className="ml-3">
                 <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-silk-600 to-rose-500">
-                  SilkRose
+                  Silkier Trade
                 </h2>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Trade Finance Platform</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Backoffice</p>
               </div>
             </div>
           </div>
@@ -92,18 +92,6 @@ export default function Sidebar() {
             </ul>
           </nav>
 
-          {/* User Info */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-800">
-            <div className="flex items-center">
-              <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                <span className="text-gray-600 dark:text-gray-300 font-medium">JD</span>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium">Jane Doe</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Finance Manager</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

@@ -63,9 +63,10 @@ export default function TransactionsPage() {
         </div>
 
         {/* Search and Filter Bar */}
-        <div className="card p-4">
+        <div className="card p-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
+              <label className="block mb-1 text-sm font-medium text-gray-600 dark:text-gray-400">Search</label>
               <input
                 type="text"
                 placeholder="Search transactions..."
@@ -73,10 +74,11 @@ export default function TransactionsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <FiSearch className="absolute left-3 top-3 text-gray-400" />
+              <FiSearch className="absolute left-3 top-[35px] text-gray-400" />
             </div>
             
             <div>
+              <label className="block mb-1 text-sm font-medium text-gray-600 dark:text-gray-400">Status</label>
               <select 
                 className="input" 
                 value={selectedStatus}
@@ -89,6 +91,7 @@ export default function TransactionsPage() {
             </div>
             
             <div>
+              <label className="block mb-1 text-sm font-medium text-gray-600 dark:text-gray-400">Type</label>
               <select 
                 className="input"
                 value={selectedType}
@@ -101,6 +104,7 @@ export default function TransactionsPage() {
             </div>
             
             <div>
+              <label className="block mb-1 text-sm font-medium text-gray-600 dark:text-gray-400">Amount</label>
               <select 
                 className="input"
                 value={selectedSize}
