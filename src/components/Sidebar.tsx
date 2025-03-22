@@ -25,7 +25,25 @@ import {
   FiChevronDown,
   FiChevronRight
 } from 'react-icons/fi';
+import type { IconType } from 'react-icons';
 import SilkRoseLogo from './SilkRoseLogo';
+
+// Define types for navigation items
+interface NavItem {
+  name: string;
+  href: string;
+  icon: IconType;
+  disabled?: boolean;
+  tooltip?: string;
+}
+
+interface NavSection {
+  title: string;
+  icon: IconType;
+  items: NavItem[];
+  disabled?: boolean;
+  tooltip?: string;
+}
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,12 +54,12 @@ export default function Sidebar() {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
   // Reorganized navigation with sections
-  const navigationSections = [
+  const navigationSections: NavSection[] = [
     {
       title: 'Overview',
       icon: FiGrid,
       items: [
-        { name: 'Dashboard', href: '/', icon: FiHome },
+        { name: 'Dashboard', href: '/', icon: FiHome } as NavItem,
       ]
     },
     {

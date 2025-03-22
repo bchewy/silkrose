@@ -121,7 +121,7 @@ export default function PEFirmsPage() {
   const regions = ['All', ...new Set(peFirms.map(firm => firm.region))];
 
   // Interest level stars renderer
-  const renderStars = (level) => {
+  const renderStars = (level: number) => {
     return Array(5).fill(0).map((_, i) => (
       <FiStar 
         key={i} 

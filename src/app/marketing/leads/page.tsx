@@ -21,6 +21,7 @@ import {
   FiRefreshCw,
   FiTrash2,
   FiZap,
+  FiFileText,
 } from 'react-icons/fi';
 import Link from 'next/link';
 import { Line } from 'react-chartjs-2';

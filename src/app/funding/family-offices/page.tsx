@@ -141,7 +141,7 @@ export default function FamilyOfficesPage() {
   const regions = ['All', ...new Set(familyOffices.map(office => office.region))];
 
   // Interest level stars renderer
-  const renderStars = (level) => {
+  const renderStars = (level: number) => {
     return Array(5).fill(0).map((_, i) => (
       <FiStar 
         key={i} 

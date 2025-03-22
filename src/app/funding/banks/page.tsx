@@ -643,7 +643,7 @@ export default function BanksPage() {
                 <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
                   <h4 className="font-medium mb-2">Business Size</h4>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Larger businesses (>$15M revenue) may find better terms with traditional banks, while smaller businesses often have better experiences with digital banks.
+                    Larger businesses ({'>'}$15M revenue) may find better terms with traditional banks, while smaller businesses often have better experiences with digital banks.
                   </p>
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
