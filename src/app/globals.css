@@ -53,4 +53,22 @@ body {
   .input::placeholder {
     @apply text-gray-500 dark:text-gray-400;
   }
+  
+  /* Custom select styling */
+  select.input {
+    @apply pr-10 relative;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+  }
+  
+  select.input option {
+    @apply bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100;
+  }
+  
+  /* Selected option highlight */
+  select.input:focus {
+    @apply border-silk-500 ring-2 ring-silk-200 dark:ring-silk-500/30;
+  }
 }

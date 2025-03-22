@@ -18,7 +18,7 @@ const investorsTourSteps: Step[] = [
     disableBeacon: true,
   },
   {
-    target: '.card:first-child',
+    target: '#investor-filters',
     content: 'Use these filters to narrow down investors by type, investment size, and focus areas.',
     placement: 'bottom',
   },
@@ -50,6 +50,84 @@ export default function InvestorsPage() {
   const [selectedFocus, setSelectedFocus] = useState('All Areas');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Sample investors data
+  const investors = [
+    {
+      name: 'Horizon Capital',
+      type: 'Private Equity',
+      range: '$1M-$5M',
+      focus: ['Import/Export', 'Manufacturing'],
+      terms: '7-9% APR, 60-120 days',
+      status: 'Active',
+      match: 'High'
+    },
+    {
+      name: 'Westfield Family Office',
+      type: 'Family Office',
+      range: '$500K-$1M',
+      focus: ['Healthcare', 'Consumer Goods'],
+      terms: '6-8% APR, 90-180 days',
+      status: 'Active',
+      match: 'Medium'
+    },
+    {
+      name: 'Global Trade Partners',
+      type: 'Corporate',
+      range: '$5M-$10M',
+      focus: ['Import/Export', 'Agriculture'],
+      terms: '8-10% APR, 30-90 days',
+      status: 'Active',
+      match: 'High'
+    },
+    {
+      name: 'Eastwood Investments',
+      type: 'Institutional',
+      range: '$5M-$10M',
+      focus: ['Technology', 'Manufacturing'],
+      terms: '7-8% APR, 60-120 days',
+      status: 'Onboarding',
+      match: 'Medium'
+    },
+    {
+      name: 'Summit Partners',
+      type: 'Private Equity',
+      range: '$1M-$5M',
+      focus: ['Healthcare', 'Technology'],
+      terms: '8-11% APR, 45-90 days',
+      status: 'Active',
+      match: 'Low'
+    },
+  ];
+
+  // Filter investors based on selected criteria
+  const filteredInvestors = investors.filter(investor => {
+    // Filter by type
+    if (selectedType !== 'All Types' && investor.type !== selectedType) {
+      return false;
+    }
+    
+    // Filter by size (approximate matching)
+    if (selectedSize !== 'All Sizes') {
+      if (!investor.range.includes(selectedSize.replace(/^\$(.+)$/, '$1'))) {
+        return false;
+      }
+    }
+    
+    // Filter by focus area
+    if (selectedFocus !== 'All Areas') {
+      if (!investor.focus.includes(selectedFocus)) {
+        return false;
+      }
+    }
+    
+    // Filter by search query
+    if (searchQuery && !investor.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+    
+    return true;
+  });
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -75,22 +153,30 @@ export default function InvestorsPage() {
         </div>
 
         {/* Search and Filter Bar */}
-        <div className="card p-4">
+        <div className="card p-4" id="investor-filters">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
+              <label htmlFor="investorSearch" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Search
+              </label>
               <input
+                id="investorSearch"
                 type="text"
                 placeholder="Search investors..."
                 className="input pl-10"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <FiSearch className="absolute left-3 top-3 text-gray-400" />
+              <FiSearch className="absolute left-3 top-10 text-gray-400" />
             </div>
             
             <div>
+              <label htmlFor="investorType" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Investor Type
+              </label>
               <select 
-                className="input" 
+                id="investorType"
+                className="input cursor-pointer appearance-none bg-white dark:bg-gray-700"
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
               >
@@ -101,8 +187,12 @@ export default function InvestorsPage() {
             </div>
             
             <div>
+              <label htmlFor="investmentSize" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Investment Size
+              </label>
               <select 
-                className="input"
+                id="investmentSize"
+                className="input cursor-pointer appearance-none bg-white dark:bg-gray-700"
                 value={selectedSize}
                 onChange={(e) => setSelectedSize(e.target.value)}
               >
@@ -113,8 +203,12 @@ export default function InvestorsPage() {
             </div>
             
             <div>
+              <label htmlFor="focusArea" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Focus Area
+              </label>
               <select 
-                className="input"
+                id="focusArea"
+                className="input cursor-pointer appearance-none bg-white dark:bg-gray-700"
                 value={selectedFocus}
                 onChange={(e) => setSelectedFocus(e.target.value)}
               >
@@ -125,6 +219,73 @@ export default function InvestorsPage() {
             </div>
           </div>
         </div>
+        
+        {/* Filter indicators */}
+        {(selectedType !== 'All Types' || selectedSize !== 'All Sizes' || selectedFocus !== 'All Areas' || searchQuery) && (
+          <div className="flex flex-wrap gap-2 items-center mb-3">
+            <span className="text-sm text-gray-600 dark:text-gray-400">Active filters:</span>
+            
+            {selectedType !== 'All Types' && (
+              <span className="flex items-center bg-silk-100 dark:bg-silk-900/30 text-silk-800 dark:text-silk-300 px-3 py-1 rounded-full text-sm">
+                Type: {selectedType}
+                <button 
+                  className="ml-2 text-silk-600 dark:text-silk-400 hover:text-silk-800"
+                  onClick={() => setSelectedType('All Types')}
+                >
+                  <FiX size={14} />
+                </button>
+              </span>
+            )}
+            
+            {selectedSize !== 'All Sizes' && (
+              <span className="flex items-center bg-silk-100 dark:bg-silk-900/30 text-silk-800 dark:text-silk-300 px-3 py-1 rounded-full text-sm">
+                Size: {selectedSize}
+                <button 
+                  className="ml-2 text-silk-600 dark:text-silk-400 hover:text-silk-800"
+                  onClick={() => setSelectedSize('All Sizes')}
+                >
+                  <FiX size={14} />
+                </button>
+              </span>
+            )}
+            
+            {selectedFocus !== 'All Areas' && (
+              <span className="flex items-center bg-silk-100 dark:bg-silk-900/30 text-silk-800 dark:text-silk-300 px-3 py-1 rounded-full text-sm">
+                Focus: {selectedFocus}
+                <button 
+                  className="ml-2 text-silk-600 dark:text-silk-400 hover:text-silk-800"
+                  onClick={() => setSelectedFocus('All Areas')}
+                >
+                  <FiX size={14} />
+                </button>
+              </span>
+            )}
+            
+            {searchQuery && (
+              <span className="flex items-center bg-silk-100 dark:bg-silk-900/30 text-silk-800 dark:text-silk-300 px-3 py-1 rounded-full text-sm">
+                Search: {searchQuery}
+                <button 
+                  className="ml-2 text-silk-600 dark:text-silk-400 hover:text-silk-800"
+                  onClick={() => setSearchQuery('')}
+                >
+                  <FiX size={14} />
+                </button>
+              </span>
+            )}
+            
+            <button 
+              className="text-silk-600 dark:text-silk-400 hover:text-silk-800 text-sm"
+              onClick={() => {
+                setSelectedType('All Types');
+                setSelectedSize('All Sizes');
+                setSelectedFocus('All Areas');
+                setSearchQuery('');
+              }}
+            >
+              Clear all
+            </button>
+          </div>
+        )}
         
         {/* Investors Table */}
         <div className="card">
@@ -142,53 +303,7 @@ export default function InvestorsPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  {
-                    name: 'Horizon Capital',
-                    type: 'Private Equity',
-                    range: '$1M-$5M',
-                    focus: ['Import/Export', 'Manufacturing'],
-                    terms: '7-9% APR, 60-120 days',
-                    status: 'Active',
-                    match: 'High'
-                  },
-                  {
-                    name: 'Westfield Family Office',
-                    type: 'Family Office',
-                    range: '$500K-$2M',
-                    focus: ['Healthcare', 'Consumer Goods'],
-                    terms: '6-8% APR, 90-180 days',
-                    status: 'Active',
-                    match: 'Medium'
-                  },
-                  {
-                    name: 'Global Trade Partners',
-                    type: 'Corporate',
-                    range: '$2M-$10M',
-                    focus: ['Import/Export', 'Agriculture'],
-                    terms: '8-10% APR, 30-90 days',
-                    status: 'Active',
-                    match: 'High'
-                  },
-                  {
-                    name: 'Eastwood Investments',
-                    type: 'Institutional',
-                    range: '$5M-$20M',
-                    focus: ['Technology', 'Manufacturing'],
-                    terms: '7-8% APR, 60-120 days',
-                    status: 'Onboarding',
-                    match: 'Medium'
-                  },
-                  {
-                    name: 'Summit Partners',
-                    type: 'Private Equity',
-                    range: '$1M-$8M',
-                    focus: ['Healthcare', 'Technology'],
-                    terms: '8-11% APR, 45-90 days',
-                    status: 'Active',
-                    match: 'Low'
-                  },
-                ].map((investor, index) => (
+                {filteredInvestors.map((investor, index) => (
                   <tr key={index} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50">
                     <td className="py-3 px-4">
                       <div className="flex items-center">
