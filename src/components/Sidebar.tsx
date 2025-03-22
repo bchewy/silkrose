@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { 
   FiHome, 
   FiUsers, 
@@ -20,12 +20,20 @@ import {
   FiDollarSign,
   FiPieChart,
   FiMapPin,
-  FiFolder
+  FiFolder,
+  FiLogOut,
+  FiChevronDown,
+  FiChevronRight
 } from 'react-icons/fi';
+import SilkRoseLogo from './SilkRoseLogo';
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  
+  // Track which sections are expanded (initially expand the current section)
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
   // Reorganized navigation with sections
   const navigationSections = [
@@ -43,6 +51,35 @@ export default function Sidebar() {
         { name: 'Trade Opportunities', href: '/opportunities', icon: FiTarget },
         { name: 'Transaction Flow', href: '/transactions', icon: FiClock },
         { name: 'Investor Matching', href: '/investors', icon: FiUsers },
+      ]
+    },
+    {
+      title: 'Funding Sources',
+      icon: FiUsers,
+      items: [
+        { name: 'PE Firms', href: '/funding/pe-firms', icon: FiBarChart2 },
+        { name: 'Family Offices', href: '/funding/family-offices', icon: FiUsers },
+        { name: 'Crowdfunding', href: '/funding/crowdfunding', icon: FiGlobe },
+      ]
+    },
+    {
+      title: 'Research & Insights',
+      icon: FiFileText,
+      items: [
+        { name: 'AI Research', href: '/research/ai', icon: FiTarget },
+        { name: 'Market Trends', href: '#', icon: FiTrendingUp, disabled: true, tooltip: 'Coming Soon' },
+        { name: 'Regulatory Updates', href: '#', icon: FiShield, disabled: true, tooltip: 'Coming Soon' },
+      ]
+    },
+    {
+      title: 'Marketing',
+      icon: FiTrendingUp,
+      disabled: true,
+      tooltip: 'Coming Soon',
+      items: [
+        { name: 'Lead Generation', href: '#', icon: FiTarget, disabled: true },
+        { name: 'Content Management', href: '#', icon: FiFileText, disabled: true },
+        { name: 'SEO Performance', href: '#', icon: FiBarChart2, disabled: true },
       ]
     },
     {
@@ -71,8 +108,30 @@ export default function Sidebar() {
     },
   ];
 
+  // Initialize the expanded sections based on the current path
+  useEffect(() => {
+    const initialExpandedSections: Record<string, boolean> = {};
+    
+    // Find which section contains the current path and expand it
+    navigationSections.forEach(section => {
+      const isCurrentSection = section.items.some(item => pathname === item.href);
+      if (isCurrentSection) {
+        initialExpandedSections[section.title] = true;
+      }
+    });
+    
+    setExpandedSections(initialExpandedSections);
+  }, [pathname]);
+
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleSection = (sectionTitle: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [sectionTitle]: !prev[sectionTitle]
+    }));
   };
 
   return (
@@ -93,13 +152,11 @@ export default function Sidebar() {
       >
         <div className="h-full flex flex-col">
           {/* Sidebar Header */}
-          <div className="px-4 py-6 border-b border-gray-200 dark:border-gray-800">
+          <div className="px-4 py-4 border-b border-gray-200 dark:border-gray-800">
             <div className="flex items-center">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-r from-silk-600 to-rose-500 flex items-center justify-center text-white font-bold text-xl">
-                ST
-              </div>
+              <SilkRoseLogo size={32} className="animate-spin-slow" />
               <div className="ml-3">
-                <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-silk-600 to-rose-500">
+                <h2 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-silk-600 to-rose-500">
                   Silkier Trade
                 </h2>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Backoffice</p>
@@ -107,37 +164,125 @@ export default function Sidebar() {
             </div>
           </div>
 
-          {/* Navigation with Sections */}
-          <nav className="flex-1 px-2 py-4 overflow-y-auto">
-            {navigationSections.map((section, idx) => (
-              <div key={section.title} className={idx > 0 ? 'mt-6' : ''}>
-                <h3 className="px-4 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center">
-                  <section.icon className="h-3.5 w-3.5 mr-1.5 opacity-75" />
-                  <span className="mr-2">{section.title}</span>
-                  <span className="flex-grow h-px bg-gray-200 dark:bg-gray-700"></span>
-                </h3>
-                <ul className="mt-1 space-y-1">
-                  {section.items.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className={`flex items-center px-4 py-2.5 text-sm rounded-md ${
-                          pathname === item.href
-                            ? 'bg-silk-50 text-silk-700 dark:bg-gray-800 dark:text-silk-400'
-                            : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
-                        }`}
-                      >
-                        <item.icon className="h-5 w-5 mr-3" />
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          {/* Navigation with Sections - Custom Scrollbar */}
+          <nav className="flex-1 px-2 py-2 overflow-y-auto sidebar-scrollbar">
+            {navigationSections.map((section, idx) => {
+              const isExpanded = expandedSections[section.title];
+              
+              return (
+                <div key={section.title} className={idx > 0 ? 'mt-2' : ''}>
+                  <button 
+                    onClick={() => !section.disabled && toggleSection(section.title)}
+                    className={`w-full px-2 py-1.5 text-xs font-semibold ${
+                      section.disabled 
+                        ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed' 
+                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/50'
+                    } uppercase tracking-wider flex items-center justify-between group relative rounded-md`}
+                  >
+                    <div className="flex items-center">
+                      <section.icon className="h-3.5 w-3.5 mr-1.5 opacity-75" />
+                      <span>{section.title}</span>
+                    </div>
+                    
+                    {!section.disabled && (
+                      isExpanded ? 
+                        <FiChevronDown className="h-3.5 w-3.5" /> : 
+                        <FiChevronRight className="h-3.5 w-3.5" />
+                    )}
+                    
+                    {section.tooltip && (
+                      <span className="absolute left-0 -top-8 scale-0 transition-all rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100 whitespace-nowrap z-10">
+                        {section.tooltip}
+                      </span>
+                    )}
+                  </button>
+                  
+                  {isExpanded && (
+                    <ul className="mt-1 space-y-0.5 ml-2 pl-2 border-l border-gray-200 dark:border-gray-700">
+                      {section.items.map((item) => (
+                        <li key={item.name}>
+                          {item.disabled ? (
+                            <div
+                              className="flex items-center px-3 py-1.5 text-sm rounded-md text-gray-400 dark:text-gray-500 cursor-not-allowed group relative"
+                            >
+                              <item.icon className="h-4 w-4 mr-2" />
+                              {item.name}
+                              {item.tooltip && (
+                                <span className="absolute left-0 -top-8 scale-0 transition-all rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100 whitespace-nowrap z-10">
+                                  {item.tooltip}
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <Link
+                              href={item.href}
+                              className={`flex items-center px-3 py-1.5 text-sm rounded-md ${
+                                pathname === item.href
+                                  ? 'bg-silk-50 text-silk-700 dark:bg-gray-800 dark:text-silk-400'
+                                  : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                              }`}
+                            >
+                              <item.icon className="h-4 w-4 mr-2" />
+                              {item.name}
+                            </Link>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
           </nav>
+
+          {/* Sign out button */}
+          <div className="p-3 border-t border-gray-200 dark:border-gray-800">
+            <button
+              onClick={() => router.push('/login')}
+              className="w-full flex items-center justify-center px-4 py-2 text-sm rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors duration-200"
+            >
+              <FiLogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Custom scrollbar styles */}
+      <style jsx global>{`
+        .sidebar-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        
+        .sidebar-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        
+        .sidebar-scrollbar::-webkit-scrollbar-thumb {
+          background-color: rgba(156, 163, 175, 0.2);
+          border-radius: 20px;
+        }
+        
+        .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(156, 163, 175, 0.5);
+        }
+        
+        /* For Firefox */
+        .sidebar-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(156, 163, 175, 0.2) transparent;
+        }
+        
+        /* Hide scrollbar when not hovering */
+        .sidebar-scrollbar {
+          overflow-y: auto;
+        }
+        
+        /* Show scrollbar on hover */
+        .sidebar-scrollbar:hover::-webkit-scrollbar-thumb {
+          background-color: rgba(156, 163, 175, 0.5);
+        }
+      `}</style>
 
       {/* Backdrop for mobile */}
       {isOpen && (

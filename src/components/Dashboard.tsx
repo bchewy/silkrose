@@ -12,7 +12,8 @@ import {
   FiCalendar,
   FiFileText,
   FiPercent,
-  FiShield
+  FiShield,
+  FiTrendingUp
 } from 'react-icons/fi';
 import Link from 'next/link';
 import {
@@ -67,14 +68,25 @@ const dashboardTourSteps: Step[] = [
     placement: 'left',
   },
   {
-    target: '.urgent-attention',
-    content: 'Items requiring your immediate attention appear here. Click on any item to view more details.',
+    target: '.funding-sources',
+    content: 'This section shows alternative funding sources beyond traditional banks, including PE firms, family offices, and crowdfunding.',
+    placement: 'bottom',
+  },
+  {
+    target: '.research-insights',
+    content: 'Stay updated with AI-generated research, market trends, and regulatory changes.',
     placement: 'right',
   },
   {
-    target: '.trade-opportunities',
-    content: 'Browse recent trade finance opportunities here. You can see key details like amount, term, and APR at a glance.',
+    target: '.marketing-metrics',
+    content: 'Track your marketing efforts and lead generation performance here.',
     placement: 'top',
+    disableBeacon: false,
+  },
+  {
+    target: '.urgent-attention',
+    content: 'Items requiring your immediate attention appear here. Click on any item to view more details.',
+    placement: 'right',
   }
 ];
 
@@ -153,6 +165,47 @@ export default function Dashboard() {
           'rgba(16, 185, 129, 1)',
         ],
         borderWidth: 1,
+      },
+    ],
+  };
+
+  // Alternative funding sources data
+  const fundingSourcesData = {
+    labels: ['PE Firms', 'Family Offices', 'Crowdfunding', 'Traditional Banks'],
+    datasets: [
+      {
+        label: 'Funding Amount (Millions)',
+        data: [18, 12, 5, 9],
+        backgroundColor: [
+          'rgba(59, 130, 246, 0.7)',
+          'rgba(16, 185, 129, 0.7)',
+          'rgba(245, 158, 11, 0.7)',
+          'rgba(107, 114, 128, 0.7)',
+        ],
+        borderColor: [
+          'rgba(59, 130, 246, 1)',
+          'rgba(16, 185, 129, 1)',
+          'rgba(245, 158, 11, 1)',
+          'rgba(107, 114, 128, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  // Marketing metrics data
+  const marketingMetricsData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    datasets: [
+      {
+        label: 'Website Visitors',
+        data: [820, 932, 901, 934, 1290, 1330],
+        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+      },
+      {
+        label: 'Leads Generated',
+        data: [120, 132, 101, 134, 190, 230],
+        backgroundColor: 'rgba(16, 185, 129, 0.5)',
       },
     ],
   };
@@ -273,8 +326,59 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Alternative Funding Sources */}
+        <div className="card p-4 funding-sources">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-medium">Alternative Funding Sources</h3>
+            <Link href="/funding/pe-firms" className="text-sm text-silk-600 hover:text-silk-700 flex items-center">
+              <span>View All Sources</span>
+              <FiArrowRight className="ml-1 h-4 w-4" />
+            </Link>
+          </div>
+          <div className="h-48">
+            <Bar 
+              data={fundingSourcesData} 
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    grid: {
+                      display: true,
+                      color: 'rgba(0, 0, 0, 0.05)',
+                    },
+                    ticks: {
+                      callback: function(value) {
+                        return '$' + value + 'M';
+                      }
+                    }
+                  },
+                  x: {
+                    grid: {
+                      display: false,
+                    }
+                  }
+                },
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: function(context) {
+                        return context.dataset.label + ': $' + context.parsed.y + 'M';
+                      }
+                    }
+                  }
+                },
+              }}
+            />
+          </div>
+        </div>
+
         {/* Urgent Attention Items */}
-        <div className="card p-4 col-span-1 lg:col-span-2 urgent-attention">
+        <div className="card p-4 urgent-attention">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-medium">Urgent Attention Required</h3>
             <Link href="/transactions" className="text-sm text-silk-600 hover:text-silk-700 flex items-center">
@@ -338,6 +442,139 @@ export default function Dashboard() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* AI Research & Insights */}
+      <div className="card p-4 research-insights">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-medium">AI Research & Market Insights</h3>
+          <Link href="/research/ai" className="text-sm text-silk-600 hover:text-silk-700 flex items-center">
+            <span>View All Research</span>
+            <FiArrowRight className="ml-1 h-4 w-4" />
+          </Link>
+        </div>
+        <div className="space-y-3">
+          <div className="flex items-start p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+            <div className="flex-shrink-0 mr-3 mt-1">
+              <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                <FiTarget className="h-4 w-4" />
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium">New PE Firms Entering Trade Finance</h4>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                AI analysis detected 5 new private equity firms showing interest in trade finance investments this month.
+              </p>
+              <div className="flex items-center mt-2">
+                <FiCalendar className="h-3 w-3 text-gray-400" />
+                <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">Updated 2 days ago</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-start p-3 rounded-lg bg-green-50 dark:bg-green-900/20">
+            <div className="flex-shrink-0 mr-3 mt-1">
+              <div className="h-8 w-8 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center text-green-600 dark:text-green-400">
+                <FiFileText className="h-4 w-4" />
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium">Regulatory Changes in Singapore</h4>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                New trade finance regulations in Singapore may open up opportunities for alternative funding models.
+              </p>
+              <div className="flex items-center mt-2">
+                <FiCalendar className="h-3 w-3 text-gray-400" />
+                <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">Updated 1 week ago</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-start p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20">
+            <div className="flex-shrink-0 mr-3 mt-1">
+              <div className="h-8 w-8 rounded-full bg-purple-100 dark:bg-purple-800 flex items-center justify-center text-purple-600 dark:text-purple-400">
+                <FiTrendingUp className="h-4 w-4" />
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium">Family Offices Increasing Trade Finance Allocation</h4>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Market trend analysis shows family offices are increasing their trade finance allocation by 18% YoY.
+              </p>
+              <div className="flex items-center mt-2">
+                <FiCalendar className="h-3 w-3 text-gray-400" />
+                <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">Updated 3 days ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Marketing & Lead Generation */}
+      <div className="card p-4 marketing-metrics">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-medium">Marketing & Lead Generation</h3>
+          <Link href="/marketing/leads" className="text-sm text-silk-600 hover:text-silk-700 flex items-center">
+            <span>View Marketing Dashboard</span>
+            <FiArrowRight className="ml-1 h-4 w-4" />
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2">
+            <div className="h-48">
+              <Bar 
+                data={marketingMetricsData} 
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      grid: {
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.05)',
+                      }
+                    },
+                    x: {
+                      grid: {
+                        display: false,
+                      }
+                    }
+                  },
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                    }
+                  },
+                }}
+              />
+            </div>
+          </div>
+          <div>
+            <div className="space-y-3">
+              <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800">
+                <div className="flex justify-between items-center">
+                  <h4 className="text-sm font-medium">Email Campaigns</h4>
+                  <div className="text-green-600 flex items-center text-xs">
+                    <FiArrowUp className="h-3 w-3 mr-1" />
+                    <span>12%</span>
+                  </div>
+                </div>
+                <p className="text-2xl font-semibold mt-2">85%</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Open rate</p>
+              </div>
+              <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800">
+                <div className="flex justify-between items-center">
+                  <h4 className="text-sm font-medium">SEO Keywords</h4>
+                  <div className="text-green-600 flex items-center text-xs">
+                    <FiArrowUp className="h-3 w-3 mr-1" />
+                    <span>8</span>
+                  </div>
+                </div>
+                <p className="text-2xl font-semibold mt-2">24</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Top 10 positions</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

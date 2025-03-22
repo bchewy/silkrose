@@ -72,3 +72,11 @@ body {
     @apply border-silk-500 ring-2 ring-silk-200 dark:ring-silk-500/30;
   }
 }
+
+/* Onboarding Tour Styles */
+.onboarding-highlight {
+  position: relative;
+  z-index: 41;
+  box-shadow: 0 0 0 4px var(--silk-primary);
+  border-radius: 4px;
+}

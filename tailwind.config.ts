@@ -38,6 +38,12 @@ export default {
           950: "#560010",
         },
       },
+      animation: {
+        'spin-slow': 'spin 8s linear infinite',
+      },
+      boxShadow: {
+        'glow': '0 0 15px rgba(194, 62, 255, 0.5)',
+      },
     },
   },
   plugins: [],
